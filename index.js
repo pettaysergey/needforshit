@@ -85,7 +85,7 @@ const loop = () => {
     currentWall.wallDirection === userPosition &&
     currentWall.y === canvas.clientHeight - 56
   ) {
-    // alert("Game over");
+    alert("Game over");
   }
 
   // Одно движение змейки — один новый нарисованный квадратик
