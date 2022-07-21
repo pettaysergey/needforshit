@@ -7,6 +7,9 @@ stopSignal.src = "./stop.png";
 road.src = "./road.png";
 asphalt.src = "./asphalt.png";
 
+const scoreBlock = document.querySelector(".dash__text_score");
+const livesBlock = document.querySelector(".dash__text_lives");
+
 let canvas = document.getElementById("game");
 let context = canvas.getContext("2d");
 // Размер одной клеточки на поле — 16 пикселей
@@ -28,6 +31,18 @@ let snake = {
   maxCells: 1,
 };
 let userPosition = "right";
+let score = 0;
+let lives = 5;
+
+livesBlock.innerHTML = lives;
+
+const setNewGame = () => {
+  alert("Game over");
+  lives = 5;
+  score = 0;
+  scoreBlock.innerHTML = score;
+  livesBlock.innerHTML = lives;
+};
 
 // Игровой цикл — основной процесс, внутри которого будет всё происходить
 const loop = () => {
@@ -35,10 +50,11 @@ const loop = () => {
   // Хитрая функция, которая замедляет скорость игры с 60 кадров в секунду до 15 (60/15 = 4)
   requestAnimationFrame(loop);
   // Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная count меньше четырёх, код выполняться не будет
-  if (++count < 4) {
+  if (++count < 6) {
     return;
   }
   // Обнуляем переменную скорости
+  score += 1;
   count = 0;
   // Очищаем игровое поле
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -85,7 +101,11 @@ const loop = () => {
     currentWall.wallDirection === userPosition &&
     currentWall.y === canvas.clientHeight - 56
   ) {
-    alert("Game over");
+    lives -= 1;
+    livesBlock.innerHTML = lives;
+    if (lives === 0) {
+      setNewGame();
+    }
   }
 
   // Одно движение змейки — один новый нарисованный квадратик
@@ -111,6 +131,8 @@ const loop = () => {
   } else {
     context.drawImage(car, snake.x, canvas.clientHeight - 50, 20, 50);
   }
+
+  scoreBlock.innerHTML = score;
 };
 
 // Смотрим, какие нажимаются клавиши, и реагируем на них нужным образом
